@@ -5,10 +5,9 @@ ARG BUILD_DATE
 ARG VERSION
 ARG UNIFI_VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="sparklyballs"
+LABEL maintainer="dresiss"
 
 # environment settings
-ARG UNIFI_BRANCH="stable"
 ARG DEBIAN_FRONTEND="noninteractive"
 
 RUN \
@@ -24,15 +23,9 @@ RUN \
 	openjdk-8-jre-headless \
 	wget && \
  echo "**** install unifi ****" && \
- if [ -z ${UNIFI_VERSION+x} ]; then \
- 	UNIFI_VERSION=$(curl -sX GET http://dl-origin.ubnt.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages \
-	|grep -A 7 -m 1 'Package: unifi' \
-	| awk -F ': ' '/Version/{print $2;exit}' \
-	| awk -F '-' '{print $1}'); \
- fi && \
  curl -o \
  /tmp/unifi.deb -L \
-	"http://dl.ubnt.com/unifi/${UNIFI_VERSION}/unifi_sysvinit_all.deb" && \
+	"https://raw.githubusercontent.com/dresiss/docker-unifi-controller/master/unifi.deb" && \
  dpkg -i /tmp/unifi.deb && \
  echo "**** cleanup ****" && \
  apt-get clean && \
